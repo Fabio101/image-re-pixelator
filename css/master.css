@@ -1,0 +1,48 @@
+body {
+	background-image: url("../img/pixels.jpg");
+        background-repeat: no-repeat;
+	margin: 0;
+    	z-index: -999;
+}
+		
+/*img {
+	border:none;
+	z-index: 1;
+  	min-height: 100%;
+  	min-width: 1px;
+  	width: 100%;
+  	height: auto;
+  	position: fixed;
+  	top: 0;
+  	left: 0;	
+}*/
+	
+#items {
+	width:1920px;
+	height:1080px;
+}
+
+#items .item {
+	display:block;
+	width:40px;
+	height:40px;
+	float:left;
+	position:relative;
+}
+		
+.clear {
+	clear:both;	
+}
+	
+.effect {
+	/* CSS3 shadow */
+	box-shadow: 0 0 10px #444;	
+	-moz-box-shadow: 0 0 10px #444;	
+	-webkit-box-shadow: 0 0 10px #444;	
+}
+
+div {
+    width: 100px;
+    height: 100px;
+    float: left;
+}

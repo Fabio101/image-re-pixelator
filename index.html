@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8 />
+  <meta name="viewport" content="width=device-width"/>
+  <title>Pixels</title>
+  <link rel="stylesheet" type="text/css" href="css/master.css" />
+</head>
+<body >
+<div id="items">
+</div>
+</body>
+</html>
+
+<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript">
+
+$(window).load(function () {
+
+	/*FORMULA for counts below: 
+
+		horizontalResolution / sqaurePixelSize
+		verticalResolution / sqaurePixelSize
+
+		eg: 
+			1920 / 40 = 48
+			1080 / 40 = 27
+
+		This is not very precise, so size your 'pixels' so that there is no remainder after division to get a perfetc fit...
+	*/
+
+	var countWidth = 48;
+	var countHeight = 27;
+	var count = countWidth * countHeight;
+
+	//Echo the number of 'pixels' to console incase you need this value later
+	console.log(count);
+
+	for (i=0; i < count; i++) {
+    		var div = $('<div class="item" id='+ i +'><img src="img/black.jpg" width="40" height="40"/></div>');
+    		div.html();
+    		div.appendTo('#items');
+	}
+	reveal();
+});
+
+function reveal() {
+
+		var numPixels = $('.item').length;
+        	var ids = [];
+
+                var pixelLoop = setInterval( function() {
+
+                	var pixelId = Math.floor(Math.random() * ((numPixels-1)+1) + 1);
+
+                	if (ids.indexOf(pixelId) == -1) {
+                        	ids.push(pixelId);
+                        	$('#' + pixelId).css('opcaity', 0).fadeTo(100, 0);
+                	} else if (ids.length == numPixels) {
+                        	clearInterval(pixelLoop);
+                        	//Used for dev and testing the regression of ids. Not for production!
+                        	//checkDups();
+                        	return; 
+                	}	 
+
+                },1);
+}
+
+function checkDups() {
+
+                var sorted_ids = ids.slice().sort();
+                var results = [];
+
+
+                for (var i = 0; i < ids.length - 1; i++) {
+                        if (sorted_ids[i + 1] == sorted_ids[i]) {
+                                results.push(sorted_ids[i]);
+                        }
+                }
+
+                alert(results);
+}
+</script>
