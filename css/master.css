@@ -5,17 +5,9 @@ body {
     	z-index: -999;
 }
 		
-/*img {
-	border:none;
+img {
 	z-index: 1;
-  	min-height: 100%;
-  	min-width: 1px;
-  	width: 100%;
-  	height: auto;
-  	position: fixed;
-  	top: 0;
-  	left: 0;	
-}*/
+}
 	
 #items {
 	width:1920px;
