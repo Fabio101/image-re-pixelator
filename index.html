@@ -5,14 +5,10 @@
   <meta name="viewport" content="width=device-width"/>
   <title>Pixels</title>
   <link rel="stylesheet" type="text/css" href="css/master.css" />
+  <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
 </head>
-<body >
-<div id="items">
-</div>
-</body>
-</html>
-
-<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<body>
+<img id="main" src="img/image1.jpg">
 <script type="text/javascript">
 
 $(document).ready(function () {
@@ -23,45 +19,32 @@ $(document).ready(function () {
 		verticalResolution / sqaurePixelSize
 
 		eg: 
-			1920 / 40 = 48
-			1080 / 40 = 27
-
-		This is not very precise, so size your 'pixels' so that there is no remainder after division to get a perfect fit...
+			648 / 6 = 108
+			576 / 6 = 96
 	*/
 
-	var countWidth = 48;
-	var countHeight = 27;
+	var countWidth = 108;
+	var countHeight = 96;
 	var count = countWidth * countHeight;
 
 	//Echo the number of 'pixels' to console incase you need this value later
 	console.log(count);
-
+	
 	//Loop of the resolution ('pixel' count) appending to the item div tag a smaller div tag with a blick image which represent the 'pixel'
 	for (i=0; i < count; i++) {
-    		var div = $('<div class="item" id='+ i +'><img src="img/black.jpg" width="40" height="40"/></div>');
-    		div.html();
-    		div.appendTo('#items');
+    		var div = $('<img id='+ i +' class="pixel "src="img/black.jpg">');
+		div.html();
+		div.appendTo(document.body);
 	}
+	
 	reveal();
 });
 
 function reveal() {
 
-	//Lets see if we need to continue or start a fresh reveal...
-	if (checkCookie() == true) {
-		//We parse the saved JSON cookie and then build a new regular JS array... *puke*
-		var cookieData = JSON.parse(getCookie("ids")); 
-		var ids = [];
-		for (var i in cookieData) {
-			ids.push(cookieData[i]);
-			
-		}
-	} else {
-		var ids = [];
-	}
-
 	var min = 1;
-	var numPixels = $('.item').length;
+	var numPixels = $('.pixel').length;
+	var ids = [];
 
 	//Main reveal loop
         var pixelLoop = setInterval( function() {
@@ -71,7 +54,6 @@ function reveal() {
 		//if the pixel id does not exist in our id array, we enter it into the array and fade to zero opacity o nthat pixel div
                 if (ids.indexOf(pixelId) == -1) {
                 	ids.push(pixelId);
-			setCookie('ids', ids, '1');
                         $('#' + pixelId).css('opcaity', 0).fadeTo(100, 0);
 		//If we have reached tthe total number of pixels we stop the loop
                 } else if (ids.length == numPixels) {
@@ -81,38 +63,7 @@ function reveal() {
                         return; 
                 }	 
 
-	},10);
-}
-
-function checkCookie() {
-
-	var idArray = getCookie("ids");
-    	if (idArray != "") {
-        	alert(idArray);
-		return true;
-    	}else{
-		alert('No Cookie!');
-		return false;
-    	}
-}
-
-function getCookie(cname) {
-	var name = cname + "=";
-    	var ca = document.cookie.split(',');
-    	for(var i=0; i < ca.length; i++) {
-        	var c = ca[i];
-        	while (c.charAt(0)==' ') c = c.substring(1);
-        		if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-    	}
-    	return "";
-}
-
-function setCookie(cname, cvalue, exdays) {
-
-	var d = new Date();
-    	d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    	var expires = "expires="+d.toUTCString();
-    	document.cookie = cname + "=" + cvalue + "; " + expires;
+	},1);
 }
 
 //NOT FOR PRODUCTION!
@@ -130,3 +81,5 @@ function checkDups() {
         alert(results);
 }
 </script>
+</body>
+</html>
