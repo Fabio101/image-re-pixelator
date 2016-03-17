@@ -8,7 +8,7 @@
   <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
 </head>
 <body>
-<img id="main" src="img/image1.jpg">
+<img id="main">
 <script type="text/javascript">
 
 $(document).ready(function () {
@@ -37,6 +37,10 @@ $(document).ready(function () {
 		div.appendTo(document.body);
 	}
 	
+	//Now load the hidden image from GET parameter...
+	window.location.search.substr(1).split('&').forEach( function (image) {
+		$('#main').attr('src', 'img/' + image);
+	});
 	reveal();
 });
 
@@ -54,7 +58,7 @@ function reveal() {
 		//if the pixel id does not exist in our id array, we enter it into the array and fade to zero opacity o nthat pixel div
                 if (ids.indexOf(pixelId) == -1) {
                 	ids.push(pixelId);
-                        $('#' + pixelId).css('opcaity', 0).fadeTo(100, 0);
+                        $('#' + pixelId).css('opacity', 0).fadeTo(100, 0);
 		//If we have reached tthe total number of pixels we stop the loop
                 } else if (ids.length == numPixels) {
                 	clearInterval(pixelLoop);
@@ -63,7 +67,7 @@ function reveal() {
                         return; 
                 }	 
 
-	},1);
+	},3472);
 }
 
 //NOT FOR PRODUCTION!
