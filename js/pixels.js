@@ -16,29 +16,45 @@ $(document).ready(function () {
 
 	//Echo the number of 'pixels' to console incase you need this value later
 	console.log(count);
-	
-	//Loop of the resolution ('pixel' count) appending to the item div tag a smaller div tag with a blick image which represent the 'pixel'
-	for (i=0; i < count; i++) {
-    		var div = $('<img id='+ i +' class="pixel "src="img/black.jpg">');
-		div.html();
-		div.appendTo(document.body);
-	}
-	
+
+	var pixelIds = $.ajax({
+        	type: "GET",
+                async: false,
+                url: "php/retrieveProgress.php",
+                dataType: "text",
+                success : function(data) {
+                	return data;
+                        }
+	});
+		
+	if (pixelIds.responseText != 0) {
+                var ids = pixelIds.responseText.split(',');
+		createPixels(count)
+
+                for (x=0; x < ids.length; x++) {
+                	$('#' + ids[x]).css('opacity', 0).fadeTo(100, 0);
+                }
+
+	} else {
+        	var ids = [];
+		createPixels(count);
+        }
+
 	//Now load the hidden image from GET parameter...
 	window.location.search.substr(1).split('&').forEach( function (image) {
 		$('#main').attr('src', 'img/' + image);
 	});
-	reveal();
+	reveal(ids);
 });
 
-function reveal() {
+function reveal(ids) {
 
 	var min = 1;
 	var numPixels = $('.pixel').length;
-	var ids = [];
 
 	//Main reveal loop
         var pixelLoop = setInterval( function() {
+
 		//Get the random and unique (and never duplicated) id number of each pixel id 
                 var pixelId = Math.floor(Math.random() * ((numPixels-min)+1) + min);
 
@@ -68,7 +84,15 @@ function reveal() {
                         return; 
                 }	 
 
-	},1000);
+	},10);
+}
+
+function createPixels(count) {
+	for (i=0; i < count; i++) {
+        	var div = $('<img id='+ i +' class="pixel "src="img/black.jpg">');
+                div.html();
+                div.appendTo(document.body);
+        }
 }
 
 //NOT FOR PRODUCTION!
