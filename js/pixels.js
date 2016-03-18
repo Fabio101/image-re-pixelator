@@ -46,6 +46,20 @@ function reveal() {
                 if (ids.indexOf(pixelId) == -1) {
                 	ids.push(pixelId);
                         $('#' + pixelId).css('opacity', 0).fadeTo(100, 0);
+
+			//Lets save this data to the server...
+			$.ajax({
+				type: 'POST',
+				url: 'php/persistProgress.php',
+				data: {'pixels': ids},
+				success: function(data, textStatus, jqXHR) {
+						console.log("Wrote Pixel Progress to Server: " + data);
+					 },
+				error: function(jqXHR, textStatus, errorThrown) {
+						console.log("Something failed when writing Pixel Progress to Server: " + errorThrown);
+					 },
+			});
+
 		//If we have reached tthe total number of pixels we stop the loop
                 } else if (ids.length == numPixels) {
                 	clearInterval(pixelLoop);
@@ -54,7 +68,7 @@ function reveal() {
                         return; 
                 }	 
 
-	},3472);
+	},1000);
 }
 
 //NOT FOR PRODUCTION!
