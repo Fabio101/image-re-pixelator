@@ -78,8 +78,9 @@ function reveal(ids) {
 				type: 'POST',
 				url: 'php/persistProgress.php',
 				data: {'pixels': ids},
+				async: false,
 				success: function(data, textStatus, jqXHR) {
-						console.log("Wrote Pixel Progress to Server: " + data);
+						console.log("Wrote Pixel Progress to Server: " + textStatus);
 					 },
 				error: function(jqXHR, textStatus, errorThrown) {
 						console.log("Something failed when writing Pixel Progress to Server: " + errorThrown);
@@ -87,7 +88,7 @@ function reveal(ids) {
 			});
 
 		//If we have reached tthe total number of pixels we stop the loop
-                } else if (ids.length == numPixels) {
+                } else if (ids.length > numPixels) {
                 	clearInterval(pixelLoop);
 
 			//We are done, remove the persisted data file
@@ -101,7 +102,6 @@ function reveal(ids) {
                        	//checkDups();
                         return; 
                 }	 
-
 	},1);
 }
 
