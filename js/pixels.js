@@ -2,7 +2,7 @@
  * Author : Fabio Pinto <fabio@mandelbrot.co.za>
  *
  * Description : Javascript which dynamically populates the specific resolution set in CSS with 'pixels' that are really just black images set to size.
- * 		 The pixels are faded to maximum opacity to create the illusion of them revealign the image behind them. 
+ * 		 The pixels are faded to maximum opacity to create the illusion of them revealing the image behind them. 
  * 		 Persistency of the depixelation progress is persisted on server side with some simple PHP.
  *
 */
@@ -87,7 +87,7 @@ function reveal(ids) {
 			});
 
 		//If we have reached tthe total number of pixels we stop the loop
-                } else if (ids.length > numPixels) {
+                } else if (ids.length == numPixels) {
                 	clearInterval(pixelLoop);
 
 			//We are done, remove the persisted data file
