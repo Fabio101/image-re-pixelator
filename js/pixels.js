@@ -1,3 +1,12 @@
+/*
+ * Author : Fabio Pinto <fabio@mandelbrot.co.za>
+ *
+ * Description : Javascript which dynamically populates the specific resolution set in CSS with 'pixels' that are really just black images set to size.
+ * 		 The pixels are faded to maximum opacity to create the illusion of them revealign the image behind them. 
+ * 		 Persistency of the depixelation progress is persisted on server side with some simple PHP.
+ *
+*/
+
 $(document).ready(function () {
 
 	/*FORMULA for counts below: 
@@ -6,17 +15,15 @@ $(document).ready(function () {
 		verticalResolution / sqaurePixelSize
 
 		eg: 
-			648 / 6 = 108
-			576 / 6 = 96
+			648 / 8 = 81
+			576 / 8 = 71
 	*/
 
-	var countWidth = 108;
-	var countHeight = 96;
+	var countWidth = 81;
+	var countHeight = 72;
 	var count = countWidth * countHeight;
 
-	//Echo the number of 'pixels' to console incase you need this value later
-	console.log(count);
-
+	//We make an AJAX call to the server to get back a CSV file of pixelIDs.
 	var pixelIds = $.ajax({
         	type: "GET",
                 async: false,
@@ -26,7 +33,9 @@ $(document).ready(function () {
                 	return data;
                         }
 	});
-		
+	
+	//Here we check if we have any data returned by our pervios AJAX call.
+	//We then either populate a new array with this data or start a fresh array.	
 	if (pixelIds.responseText != 0) {
                 var ids = pixelIds.responseText.split(',');
 		createPixels(count)
@@ -44,12 +53,13 @@ $(document).ready(function () {
 	window.location.search.substr(1).split('&').forEach( function (image) {
 		$('#main').attr('src', 'img/' + image);
 	});
+
 	reveal(ids);
 });
 
 function reveal(ids) {
 
-	var min = 1;
+	var min = 0;
 	var numPixels = $('.pixel').length;
 
 	//Main reveal loop
@@ -73,20 +83,29 @@ function reveal(ids) {
 					 },
 				error: function(jqXHR, textStatus, errorThrown) {
 						console.log("Something failed when writing Pixel Progress to Server: " + errorThrown);
-					 },
+					 }
 			});
 
 		//If we have reached tthe total number of pixels we stop the loop
-                } else if (ids.length == numPixels) {
+                } else if (ids.length > numPixels) {
                 	clearInterval(pixelLoop);
+
+			//We are done, remove the persisted data file
+			$.ajax({
+                                type: 'POST',
+                                url: 'php/persistProgress.php',
+                                data: {'done': true}
+                        });
+
                        	//Used for dev and testing the regression of ids. Not for production!
                        	//checkDups();
                         return; 
                 }	 
 
-	},10);
+	},1);
 }
 
+//The main functions which adds our pixels
 function createPixels(count) {
 	for (i=0; i < count; i++) {
         	var div = $('<img id='+ i +' class="pixel "src="img/black.jpg">');

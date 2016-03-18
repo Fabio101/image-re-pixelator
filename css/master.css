@@ -4,11 +4,12 @@ body {
 	display:block;
 	width:648px;
         height:576px;
+	background-color:black;
 }
 
 .pixel {
-	width:6px;
-        height:6px;
+	width:8px;
+        height:8px;
 	z-index: 1000;
 	display: inline;
 	float: left;
@@ -24,6 +25,6 @@ body {
 div {
     float: left;
     margin: 0;
-    width:6px;
-    height:6px;
+    width:8px;
+    height:8px;
 }
