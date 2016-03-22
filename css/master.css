@@ -5,6 +5,8 @@ body {
 	width:648px;
         height:576px;
 	background-color:black;
+	background-image: url("../img/image1.jpg");
+	background-repeat: no-repeat;
 }
 
 .pixel {
