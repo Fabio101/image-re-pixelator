@@ -1,4 +1,6 @@
-$.getJSON("php/twitterFields.json", function(twitter_feed) {
+var cache_nuker = Math.floor((Math.random() * 1000) + 1);
+
+$.getJSON("php/twitterFields.json?" + cache_nuker, function(twitter_feed) {
     twitter_feed.forEach(function(entry, key){   	
     	$(".collection").append('<li id="' + key + '" class="collection-item avatar"><img src="' + entry.profile_image_url + '" alt="" class="circle"><span class="title">' + entry.user  + '</span>&nbsp&nbsp&nbsp<span class="screen_name">@' + entry.screen_name + '</span><br /><p>' + entry.text + '</p><div class="switch" id="switch' + key + '"><label>Off<input type="checkbox"><span class="lever"></span>On</label></div></li>');
     });

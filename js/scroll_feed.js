@@ -1,4 +1,6 @@
-$.getJSON("php/twitterModeratedFields.json", function(twitter_feed) {
+var cache_nuker = Math.floor((Math.random() * 1000) + 1);
+
+$.getJSON("php/twitterModeratedFields.json?" + cache_nuker, function(twitter_feed) {
 	var feed = "";
     twitter_feed.forEach(function(entry, key){ 
     	if (entry.moderated == 1) {
