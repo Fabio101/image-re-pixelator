@@ -1,0 +1,34 @@
+.header {
+    color: #ee6e73;
+    font-weight: 300;
+    margin-left: 30px;
+}
+
+.collection p {
+	display: inline-block;
+	width: 90%;
+}
+
+.circle {
+	border: #CCC solid 0.5px;
+}
+
+.title {
+	font-weight: bold;
+}
+
+.screen_name {
+	font-size: small;
+	color: #CCCCCC;
+}
+
+.submit_tweets {
+	position: absolute;
+	right: 2.5%;
+	margin-bottom: 20px;
+	margin-top: 5px;
+}
+
+.switch {
+	display: inline-block;
+}
