@@ -9,17 +9,15 @@
  *
 */
 
+session_start();
+
 //Write to a local file in a simple comma delimited format.
 if ( $_POST["pixels"] ) {
-	sleep(0.1);
-	$file = fopen('progress.csv', 'w+');
-	fwrite($file, implode(',', $_POST["pixels"]));
-	fclose($file);
+	$_SESSION['ids'] = implode(',', $_POST["pixels"]);
 }
 
 //When you get this, we remove the CSV file so that we can start again.
 if ( $_POST["done"] == true) {
-	$file = fopen('progress.csv', 'w+');
-	fclose($file);
+	$_SESSION['ids'] = '';
 }
 ?>

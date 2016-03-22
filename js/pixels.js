@@ -33,28 +33,34 @@ $(document).ready(function () {
                 	return data;
                         }
 	});
-	
+
 	//Here we check if we have any data returned by our pervios AJAX call.
 	//We then either populate a new array with this data or start a fresh array.	
-	if (pixelIds.responseText != 0) {
+	if (pixelIds.responseText != '') {
                 var ids = pixelIds.responseText.split(',');
-		createPixels(count)
+		for (a in ids) {
+			ids[a] = parseInt(ids[a], 10);
+		}
 
-                for (x=0; x < ids.length; x++) {
-                	$('#' + ids[x]).css('opacity', 0).fadeTo(100, 0);
-                }
+		createPixels(count, function() {
+			persistProgress(function() {reveal(ids) });
 
+			function persistProgress(callback1) {
+				for (x=0; x < ids.length; x++) {
+                        		$('#' + ids[x]).css('opacity', 0).fadeTo(100, 0);
+                        	}
+				callback1();
+			}
+		});
 	} else {
         	var ids = [];
-		createPixels(count);
+		createPixels(count, function () {reveal(ids)} );
         }
 
 	//Now load the hidden image from GET parameter...
 	window.location.search.substr(1).split('&').forEach( function (image) {
 		$('#main').attr('src', 'img/' + image);
 	});
-
-	reveal(ids);
 });
 
 function reveal(ids) {
@@ -90,7 +96,6 @@ function reveal(ids) {
 		//If we have reached tthe total number of pixels we stop the loop
                 } else if (ids.length > numPixels) {
                 	clearInterval(pixelLoop);
-
 			//We are done, remove the persisted data file
 			$.ajax({
                                 type: 'POST',
@@ -102,15 +107,20 @@ function reveal(ids) {
                        	//checkDups();
                         return; 
                 }	 
-	},1);
+	},895);
 }
 
 //The main functions which adds our pixels
-function createPixels(count) {
+function createPixels(count, callback) {
 	for (i=0; i < count; i++) {
         	var div = $('<img id='+ i +' class="pixel "src="img/black.jpg">');
                 div.html();
                 div.appendTo(document.body);
+
+		if (i == count-1) {
+			callback();
+		} else {
+		}
         }
 }
 
