@@ -1,15 +1,24 @@
 var cache_nuker = Math.floor((Math.random() * 1000) + 1);
 
 $.getJSON("php/twitterModeratedFields.json?" + cache_nuker, function(twitter_feed) {
-	var feed = "";
-    twitter_feed.forEach(function(entry, key){ 
-    	if (entry.moderated == 1) {
-    		someText = entry.text.replace(/(\r\n|\n|\r)/gm,"");
-    		feed += '<span class="tweet">' + someText + '&nbsp@' + entry.screen_name + '</span>&nbsp&nbsp&nbsp';
-    	}
-  	
-    	if (twitter_feed.length-1 == key) {
-    		$(".scroll-left p").html(feed);  		
-    	}
-    });
+	var cached_tweet = (Cookies.get("current_tweet") == undefined ? 0 : Cookies.get("current_tweet"));	
+	someText = twitter_feed[cached_tweet].text.replace(/(\r\n|\n|\r)/gm,"");
+	$(".scroll-left p").html('<span class="tweet" id="' + cached_tweet + '">' + someText + '&nbsp@' + twitter_feed[cached_tweet] + '</span>&nbsp&nbsp&nbsp');
+
+    setInterval(changeItem, 3000);
+
+	function changeItem() {
+		var current_tweet = parseInt($(".scroll-left p span").prop('id'));
+		if (current_tweet == twitter_feed.length-1) {
+			current_tweet = -1;
+		}
+		
+		var next_tweet = current_tweet + 1;
+
+		someText = twitter_feed[next_tweet].text.replace(/(\r\n|\n|\r)/gm,"");
+		$(".scroll-left p").fadeOut();
+		$(".scroll-left p").html('<span class="tweet" id="' + next_tweet + '">' + someText + '&nbsp@' + twitter_feed[next_tweet] + '</span>&nbsp&nbsp&nbsp');
+		$(".scroll-left p").fadeIn();
+		Cookies.set("current_tweet", next_tweet, { expires: 7 });
+	}    
 });

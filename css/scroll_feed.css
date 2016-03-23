@@ -3,6 +3,7 @@
 	overflow: hidden;
 	white-space: nowrap;
 	position: absolute;
+	z-index: 99;
 	color: #000000;
 	top: 546px;
 	width: 648px;
@@ -34,7 +35,7 @@
 	margin: 0;
 	line-height: 30px;
 	text-align: center;
-
+/*
 	-moz-transform:translateX(100%);
 	-webkit-transform:translateX(100%);	
 	transform:translateX(100%);
@@ -42,8 +43,9 @@
 	-moz-animation: scroll-left 15s linear infinite;
 	-webkit-animation: scroll-left 15s linear infinite;
 	animation: scroll-left 250s linear infinite;
+*/
 }
-
+/*
 @-moz-keyframes scroll-left {
 	0%   { -moz-transform: translateX(100%); }
 	100% { -moz-transform: translateX(-100%); }
@@ -54,16 +56,17 @@
 }
 @keyframes scroll-left {
  0%   { 
-	-moz-transform: translateX(100%); /* Browser bug fix */
-	-webkit-transform: translateX(100%); /* Browser bug fix */
+	-moz-transform: translateX(100%); 
+	-webkit-transform: translateX(100%);
 	transform: translateX(100%); 		
  }
  100% { 
-	-moz-transform: translateX(-100%); /* Browser bug fix */
-	-webkit-transform: translateX(-100%); /* Browser bug fix */
+	-moz-transform: translateX(-100%); 
+	-webkit-transform: translateX(-100%); 
 	transform: translateX(-9001px); 
  }
 }
+*/
 
 .tweet {
 	color: #FFFFFF;
@@ -78,4 +81,5 @@
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
 	font: normal 16px Arial,sans-serif;
+	margin-left: 50px;
 }
