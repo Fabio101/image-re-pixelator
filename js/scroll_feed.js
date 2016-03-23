@@ -3,7 +3,7 @@ var cache_nuker = Math.floor((Math.random() * 1000) + 1);
 $.getJSON("php/twitterModeratedFields.json?" + cache_nuker, function(twitter_feed) {	
 	var cached_tweet = parseInt((Cookies.get("current_tweet") == undefined ? 0 : Cookies.get("current_tweet")));
 
-	if (twitter_feed[cached_tweet].text == undefined) {
+	if (typeof twitter_feed[cached_tweet] === 'undefined') {
 		cached_tweet = 0;
 	}
 		
@@ -21,7 +21,7 @@ $.getJSON("php/twitterModeratedFields.json?" + cache_nuker, function(twitter_fee
 		
 		var next_tweet = current_tweet + 1;
 
-		if (twitter_feed[next_tweet].text == undefined) {
+		if (typeof twitter_feed[next_tweet] === 'undefined') {
 			next_tweet = 0;
 		}
 
