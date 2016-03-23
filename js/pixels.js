@@ -49,7 +49,7 @@ $(document).ready(function () {
 	//Here we check if we have any data returned by our pervios AJAX call.
 	//We then either populate a new array with this data or start a fresh array.	
 	if (pixelIds.responseText != '') {
-                var ids = pixelIds.responseText.split(',');
+        var ids = pixelIds.responseText.split(',');
 		for (a in ids) {
 			ids[a] = parseInt(ids[a], 10);
 		}
@@ -81,45 +81,49 @@ function reveal(ids, interval) {
 	var numPixels = $('.pixel').length;
 
 	//Main reveal loop
-        var pixelLoop = setInterval( function() {
+    var pixelLoop = setInterval( function() {
 
 		//Get the random and unique (and never duplicated) id number of each pixel id 
-                var pixelId = Math.floor(Math.random() * ((numPixels-min)+1) + min);
+		var pixelId = Math.floor(Math.random() * ((numPixels-min)+1) + min);
 
 		//if the pixel id does not exist in our id array, we enter it into the array and fade to zero opacity o nthat pixel div
 
-                if (ids.indexOf(pixelId) == -1) {
-                	ids.push(pixelId);
-                        $('#' + pixelId).css('opacity', 0).fadeTo(100, 0);
+		for(var i = 0; i < ids.length; i++) {
 
-			//Lets save this data to the server...
-			$.ajax({
-				type: 'POST',
-				url: 'php/persistProgress.php',
-				data: {'pixels': ids},
-				async: true,
-				success: function(data, textStatus, jqXHR) {
+			if (ids[i] !== pixelId) {
+				ids.push(pixelId);
+				$('#' + pixelId).css('opacity', 0).fadeTo(100, 0);
+
+				//Lets save this data to the server...
+				$.ajax({
+					type: 'POST',
+					url: 'php/persistProgress.php',
+					data: {'pixels': ids},
+					async: true,
+					success: function(data, textStatus, jqXHR) {
 						console.log("Wrote Pixel Progress to Server: " + textStatus);
-					 },
-				error: function(jqXHR, textStatus, errorThrown) {
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
 						console.log("Something failed when writing Pixel Progress to Server: " + errorThrown);
-					 }
-			});
+					}
+				});
 
-		//If we have reached tthe total number of pixels we stop the loop
-                } else if (ids.length > numPixels) {
-                	clearInterval(pixelLoop);
-			//We are done, remove the persisted data file
-			$.ajax({
-                                type: 'POST',
-                                url: 'php/persistProgress.php',
-                                data: {'done': true}
-                        });
+			//If we have reached tthe total number of pixels we stop the loop
+			} else if (i > numPixels) {
+				clearInterval(pixelLoop);
+				//We are done, remove the persisted data file
+				$.ajax({
+				    type: 'POST',
+				    url: 'php/persistProgress.php',
+				    data: {'done': true}
+				});
 
-                       	//Used for dev and testing the regression of ids. Not for production!
-                       	//checkDups();
-                        return; 
-                }	 
+				//Used for dev and testing the regression of ids. Not for production!
+				//checkDups();
+				return; 
+			}
+		}
+
 	},interval);
 }
 
