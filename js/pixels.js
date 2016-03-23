@@ -75,6 +75,16 @@ $(document).ready(function () {
 	});
 });
 
+function checkId(ids, pixelId) {
+	for(var x = 0; x < ids.length; x++) {
+		if(ids[x] == pixelId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
 function reveal(ids, interval) {
 
 	var min = 0;
@@ -88,7 +98,8 @@ function reveal(ids, interval) {
 
 		//if the pixel id does not exist in our id array, we enter it into the array and fade to zero opacity o nthat pixel div
 
-		if (ids.indexOf(pixelId) == -1) {
+		if (!checkId(ids, pixelId)) {
+
 		    ids.push(pixelId);
 		    $('#' + pixelId).css('opacity', 0).fadeTo(100, 0);
 
