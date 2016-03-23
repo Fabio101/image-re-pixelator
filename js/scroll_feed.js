@@ -19,6 +19,6 @@ $.getJSON("php/twitterModeratedFields.json?" + cache_nuker, function(twitter_fee
 		$(".scroll-left p").fadeOut();
 		$(".scroll-left p").html('<span class="tweet" id="' + next_tweet + '">' + someText + '&nbsp@' + twitter_feed[next_tweet] + '</span>&nbsp&nbsp&nbsp');
 		$(".scroll-left p").fadeIn();
-		Cookies.set("current_tweet", next_tweet, { expires: 7 });
+		Cookies.set("current_tweet", next_tweet+1, { expires: 7 });
 	}    
 });
