@@ -16,8 +16,13 @@ if ( $_POST["pixels"] ) {
 	$_SESSION['ids'] = implode(',', $_POST["pixels"]);
 }
 
+if ( $_POST["available_pixels"] ) {
+	$_SESSION['ids2'] = implode(',', $_POST["available_pixels"]);
+}
+
 //When you get this, we remove the CSV file so that we can start again.
 if ( $_POST["done"] == true) {
 	$_SESSION['ids'] = '';
+	$_SESSION['ids2'] = '';
 }
 ?>

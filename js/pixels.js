@@ -43,31 +43,55 @@ $(document).ready(function () {
                 dataType: "text",
                 success : function(data) {
                 	return data;
-                        }
+                }
 	});
+
+	var pixelAvailableIds = $.ajax({
+        	type: "GET",
+                async: false,
+                url: "php/retrieveProgress2.php",
+                dataType: "text",
+                success : function(data) {
+                	return data;
+                }
+	});	
 
 	//Here we check if we have any data returned by our pervios AJAX call.
 	//We then either populate a new array with this data or start a fresh array.	
-	if (pixelIds.responseText != '') {
-                var ids = pixelIds.responseText.split(',');
+	if (pixelIds.responseText != '') {		
+        var ids = pixelIds.responseText.split(',');
+        var ids2 = pixelAvailableIds.responseText.split(',');
+
 		for (a in ids) {
 			ids[a] = parseInt(ids[a], 10);
 		}
 
+		for (b in ids2) {
+			ids2[b] = parseInt(ids2[b], 10);
+		}		
+
+console.log(ids.length);
+console.log(ids2.length);
+
 		createPixels(count, function() {
-			persistProgress(function() {reveal(ids, interval.responseText) });
+			persistProgress(function() {reveal(ids, interval.responseText, ids2) });
 
 			function persistProgress(callback1) {
 				for (x=0; x < ids.length; x++) {
                         		$('#' + ids[x]).css('opacity', 0).fadeTo(100, 0);
                         	}
-				callback1();
+                callback1();
 			}
 		});
 	} else {
-        	var ids = [];
-		createPixels(count, function () {reveal(ids, interval.responseText)} );
-        }
+    	var ids = [];
+		// Initalize and populate an extra array to keep track of unused pixels
+		//var N = count; 
+		//var ids2 = Array.apply(null, {length: N}).map(Number.call, Number);	
+var ids2 = range(0, count);	
+ids2 = _.shuffle(ids2);
+		createPixels(count, function () {reveal(ids, interval.responseText, ids2)} );
+    }
 
 	//Now load the hidden image from GET parameter...
 	window.location.search.substr(1).split('&').forEach( function (image) {
@@ -77,7 +101,7 @@ $(document).ready(function () {
 
 function checkId(ids, pixelId) {
 	for(var x = 0; x < ids.length; x++) {
-		if(ids[x] == pixelId) {
+		if(ids[x] === pixelId) {
 			return true;
 		} else {
 			return false;
@@ -85,8 +109,7 @@ function checkId(ids, pixelId) {
 	}
 }
 
-function reveal(ids, interval) {
-
+function reveal(ids, interval, ids2) {
 	var min = 0;
 	var numPixels = $('.pixel').length;
 
@@ -94,11 +117,15 @@ function reveal(ids, interval) {
 	var pixelLoop = setInterval( function() {
 
 		//Get the random and unique (and never duplicated) id number of each pixel id 
-		var pixelId = Math.floor(Math.random() * ((numPixels-min)+1) + min);
+		var random_int = ids2[0];//Math.floor(Math.random()*ids2.length);
+		var pixelId = ids2[0];//Math.floor(Math.random() * ((numPixels-min)+1) + min);
+
+console.log(ids.length);
+console.log(ids2.length);
+	
+		ids2.splice(0, 1);		
 
 		//if the pixel id does not exist in our id array, we enter it into the array and fade to zero opacity o nthat pixel div
-
-		if (!checkId(ids, pixelId)) {
 
 		    ids.push(pixelId);
 		    $('#' + pixelId).css('opacity', 0).fadeTo(100, 0);
@@ -107,10 +134,10 @@ function reveal(ids, interval) {
 			$.ajax({
 				type: 'POST',
 				url: 'php/persistProgress.php',
-				data: {'pixels': ids},
+				data: {'pixels': ids, 'available_pixels': ids2},
 				async: true,
 				success: function(data, textStatus, jqXHR) {
-						console.log("Wrote Pixel Progress to Server: " + textStatus);
+						//console.log("Wrote Pixel Progress to Server: " + textStatus);
 					 },
 				error: function(jqXHR, textStatus, errorThrown) {
 						console.log("Something failed when writing Pixel Progress to Server: " + errorThrown);
@@ -118,7 +145,8 @@ function reveal(ids, interval) {
 			});
 
 			//If we have reached tthe total number of pixels we stop the loop
-		} else if (ids.length > numPixels) {
+		
+		if (ids.length > numPixels) {
 		    	clearInterval(pixelLoop);
 		//We are done, remove the persisted data file
 		$.ajax({
@@ -131,7 +159,7 @@ function reveal(ids, interval) {
 		           	//checkDups();
 		            return; 
 		}	 
-	},interval);
+	}, 1000);
 }
 
 //The main functions which adds our pixels
@@ -144,8 +172,9 @@ function createPixels(count, callback) {
 		if (i == count-1) {
 			callback();
 		} else {
+			
 		}
-        }
+    }
 }
 
 //NOT FOR PRODUCTION!
@@ -161,4 +190,13 @@ function checkDups() {
                 }
         }
         alert(results);
+}
+
+function range(start, end) {
+console.log("range");	
+    var foo = [];
+    for (var i = start; i <= end; i++) {
+        foo.push(i);
+    }
+    return foo;
 }
