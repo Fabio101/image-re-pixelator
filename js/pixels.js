@@ -70,9 +70,6 @@ $(document).ready(function () {
 			ids2[b] = parseInt(ids2[b], 10);
 		}		
 
-console.log(ids.length);
-console.log(ids2.length);
-
 		createPixels(count, function() {
 			persistProgress(function() {reveal(ids, interval.responseText, ids2) });
 
@@ -119,9 +116,6 @@ function reveal(ids, interval, ids2) {
 		//Get the random and unique (and never duplicated) id number of each pixel id 
 		var random_int = ids2[0];//Math.floor(Math.random()*ids2.length);
 		var pixelId = ids2[0];//Math.floor(Math.random() * ((numPixels-min)+1) + min);
-
-console.log(ids.length);
-console.log(ids2.length);
 	
 		ids2.splice(0, 1);		
 
@@ -159,7 +153,7 @@ console.log(ids2.length);
 		           	//checkDups();
 		            return; 
 		}	 
-	}, 1000);
+	}, 1);
 }
 
 //The main functions which adds our pixels
