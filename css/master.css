@@ -10,8 +10,8 @@ body {
 }
 
 .pixel {
-	width:8px;
-        height:8px;
+	width:9px;
+        height:9px;
 	z-index: 1000;
 	display: inline;
 	float: left;
@@ -27,6 +27,6 @@ body {
 div {
     float: left;
     margin: 0;
-    width:8px;
-    height:8px;
+    width:9px;
+    height:9px;
 }

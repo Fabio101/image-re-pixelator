@@ -9,18 +9,30 @@
 
 $(document).ready(function () {
 
+	var interval = $.ajax({
+                type: "GET",
+                async: false,
+                url: "php/timeKeeper.php",
+                dataType: "text",
+                success : function(data) {
+                        return data;
+                        }
+        });
+
+	console.log("Interval in milliseconds: " + interval.responseText);
+
 	/*FORMULA for counts below: 
 
 		horizontalResolution / sqaurePixelSize
 		verticalResolution / sqaurePixelSize
 
 		eg: 
-			648 / 8 = 81
-			576 / 8 = 71
+			648 / 10 = 81
+			576 / 10 = 71
 	*/
 
-	var countWidth = 81;
-	var countHeight = 72;
+	var countWidth = 72;
+	var countHeight = 64;
 	var count = countWidth * countHeight;
 
 	//We make an AJAX call to the server to get back a CSV file of pixelIDs.
@@ -43,7 +55,7 @@ $(document).ready(function () {
 		}
 
 		createPixels(count, function() {
-			persistProgress(function() {reveal(ids) });
+			persistProgress(function() {reveal(ids, interval.responseText) });
 
 			function persistProgress(callback1) {
 				for (x=0; x < ids.length; x++) {
@@ -54,7 +66,7 @@ $(document).ready(function () {
 		});
 	} else {
         	var ids = [];
-		createPixels(count, function () {reveal(ids)} );
+		createPixels(count, function () {reveal(ids, interval.responseText)} );
         }
 
 	//Now load the hidden image from GET parameter...
@@ -63,7 +75,7 @@ $(document).ready(function () {
 	});
 });
 
-function reveal(ids) {
+function reveal(ids, interval) {
 
 	var min = 0;
 	var numPixels = $('.pixel').length;
@@ -75,6 +87,7 @@ function reveal(ids) {
                 var pixelId = Math.floor(Math.random() * ((numPixels-min)+1) + min);
 
 		//if the pixel id does not exist in our id array, we enter it into the array and fade to zero opacity o nthat pixel div
+
                 if (ids.indexOf(pixelId) == -1) {
                 	ids.push(pixelId);
                         $('#' + pixelId).css('opacity', 0).fadeTo(100, 0);
@@ -84,7 +97,7 @@ function reveal(ids) {
 				type: 'POST',
 				url: 'php/persistProgress.php',
 				data: {'pixels': ids},
-				async: false,
+				async: true,
 				success: function(data, textStatus, jqXHR) {
 						console.log("Wrote Pixel Progress to Server: " + textStatus);
 					 },
@@ -107,7 +120,7 @@ function reveal(ids) {
                        	//checkDups();
                         return; 
                 }	 
-	},895);
+	},interval);
 }
 
 //The main functions which adds our pixels
