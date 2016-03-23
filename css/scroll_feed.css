@@ -1,18 +1,16 @@
 .scroll-left {
 	height: 30px;	
-	overflow: hidden;
-	white-space: nowrap;
 	position: absolute;
 	z-index: 99;
 	color: #000000;
-	top: 546px;
+	top: 524px;
 	width: 648px;
 }
 
 .twitter-icon-container {
 	display: inline-block; 
-	width: 60px; 
-	height: 30px; 
+	width: 50px; 
+	height: 72px; 
 	position: absolute; 
 	z-index: 1; 
 	background-color: rgb(40,40,40);
@@ -33,42 +31,11 @@
 	position: absolute;
 	width: 100%;
 	margin: 0;
-	line-height: 30px;
-	text-align: center;
-/*
-	-moz-transform:translateX(100%);
-	-webkit-transform:translateX(100%);	
-	transform:translateX(100%);
-
-	-moz-animation: scroll-left 15s linear infinite;
-	-webkit-animation: scroll-left 15s linear infinite;
-	animation: scroll-left 250s linear infinite;
-*/
+	text-align: left;
 }
-/*
-@-moz-keyframes scroll-left {
-	0%   { -moz-transform: translateX(100%); }
-	100% { -moz-transform: translateX(-100%); }
-}
-@-webkit-keyframes scroll-left {
-	0%   { -webkit-transform: translateX(100%); }
-	100% { -webkit-transform: translateX(-100%); }
-}
-@keyframes scroll-left {
- 0%   { 
-	-moz-transform: translateX(100%); 
-	-webkit-transform: translateX(100%);
-	transform: translateX(100%); 		
- }
- 100% { 
-	-moz-transform: translateX(-100%); 
-	-webkit-transform: translateX(-100%); 
-	transform: translateX(-9001px); 
- }
-}
-*/
 
 .tweet {
+	height: 100%;
 	color: #FFFFFF;
 	background-color: #4099FF;
 	padding-left: 10px;
@@ -82,4 +49,5 @@
 	border-radius: 2px;
 	font: normal 16px Arial,sans-serif;
 	margin-left: 50px;
+	word-break: break-all;
 }
