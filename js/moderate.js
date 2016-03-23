@@ -8,16 +8,20 @@ $.getJSON("php/twitterFields.json?" + cache_nuker, function(twitter_feed) {
     $(".submit_tweets").click(function(e) {
 		var items = $(".collection li");
 
+		var moderated_feed = new Array();
 		items.each(function(idx, li) {
 		    var item = $(li);
 		    var item_id = item[0].id;
-			twitter_feed[item_id].moderated = $("#switch" + item_id + ".switch label input:checked").length;		    		    
+			twitter_feed[item_id].moderated = $("#switch" + item_id + ".switch label input:checked").length;
+			if (twitter_feed[item_id].moderated == 1) {
+				moderated_feed.push(twitter_feed[item_id]);
+			}
 		});
 
 		$.ajax({
 		    type: "POST",
 		    url: "php/updateTwitterFields.php",
-		    data: { "twitter_feed": JSON.stringify(twitter_feed) },
+		    data: { "twitter_feed": JSON.stringify(moderated_feed) },
 		    cache: false,
 		    success: function()
 		        {

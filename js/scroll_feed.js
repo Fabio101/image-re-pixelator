@@ -17,6 +17,10 @@ $.getJSON("php/twitterModeratedFields.json?" + cache_nuker, function(twitter_fee
 		
 		var next_tweet = current_tweet + 1;
 
+		if (twitter_feed[next_tweet].text == undefined) {
+			next_tweet = 0;
+		}
+
 		someText = twitter_feed[next_tweet].text.replace(/(\r\n|\n|\r)/gm,"");
 		$(".scroll-left p").fadeOut();
 		$(".scroll-left p").html('<div class="tweet" id="' + next_tweet + '">' + someText + '&nbsp@' + twitter_feed[next_tweet].screen_name + '</div>&nbsp&nbsp&nbsp');
