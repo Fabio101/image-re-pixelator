@@ -17,9 +17,21 @@ $(document).ready(function () {
         success : function(data) {
             return data;
         }
+
     });
 
+	var time = $.ajax({
+        type: "GET",
+        async: false,
+        url: "php/timeKeeper2.php",
+        dataType: "text",
+        success : function(data) {
+            return data;
+        }
+	});
+
 	console.log("Interval in milliseconds: " + interval.responseText);
+	console.log("Current time: " + time.responseText);
 
 	/*FORMULA for counts below: 
 
@@ -72,7 +84,7 @@ $(document).ready(function () {
 		}		
 
 		createPixels(count, function() {
-			persistProgress(function() {reveal(ids, interval.responseText, ids2) });
+			persistProgress(function() {reveal(ids, interval.responseText, ids2, time.responseText) });
 
 			function persistProgress(callback1) {
 				for (x=0; x < ids.length; x++) {
@@ -90,7 +102,7 @@ $(document).ready(function () {
 		//var ids2 = Array.apply(null, {length: N}).map(Number.call, Number);	
 		var ids2 = range(0, count);		
 		ids2 = _.shuffle(ids2);
-		createPixels(count, function () {reveal(ids, interval.responseText, ids2)} );
+		createPixels(count, function () {reveal(ids, interval.responseText, ids2, time.responseText)} );
 
     }
 
@@ -100,8 +112,7 @@ $(document).ready(function () {
 	});
 });
 
-function reveal(ids, interval, ids2) {
-
+function reveal(ids, interval, ids2, time) {
 	var min = 0;
 	var numPixels = $('.pixel').length;
 
@@ -135,7 +146,7 @@ function reveal(ids, interval, ids2) {
 
 		//If we have reached tthe total number of pixels we stop the loop
 		
-		if ((ids.length > numPixels) || (interval <= '0')) {
+		if ((ids.length > numPixels) || (timeStringToFloat(time) >= timeStringToFloat('00:15:00'))) {
 
     		$('#main').attr('src', 'img/promo2.jpg');
 			 $('#main').css('zIndex', '9000');
@@ -148,6 +159,8 @@ function reveal(ids, interval, ids2) {
 	            url: 'php/persistProgress.php',
 	            data: {'done': true}
 	        });
+
+		document.cookie = 'PHPSESSID=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
 
 	       	//Used for dev and testing the regression of ids. Not for production!
 	       	//checkDups();
@@ -198,4 +211,11 @@ function range(start, end) {
     }
     return foo;
 
+}
+
+function timeStringToFloat(time) {
+	var hoursMinutes = time.split(/[.:]/);
+	var hours = parseInt(hoursMinutes[0], 10);
+	var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+	return hours + minutes / 60;
 }
