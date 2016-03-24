@@ -20,9 +20,10 @@ if ( $_POST["available_pixels"] ) {
 	$_SESSION['ids2'] = implode(',', $_POST["available_pixels"]);
 }
 
+// NOT FOR PRODUCTION, WE DO NOT WANT TO RESTART THE THING NOW DO WE?!?!
 //When you get this, we remove the CSV file so that we can start again.
-if ( $_POST["done"] == true) {
+/*if ( $_POST["done"] == true) {
 	$_SESSION['ids'] = '';
 	$_SESSION['ids2'] = '';
-}
+}*/
 ?>

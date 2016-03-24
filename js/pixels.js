@@ -138,8 +138,8 @@ function reveal(ids, interval, ids2) {
 		if (ids.length > numPixels) {
 
     		$('#main').attr('src', 'img/promo2.jpg');
-			// $('#main').css('zIndex', '9000');
-   //  		$('#main').css({ 'position': 'relative' });
+			 $('#main').css('zIndex', '9000');
+     		$('#main').css({ 'position': 'relative' });
 
 		    clearInterval(pixelLoop);
 			//We are done, remove the persisted data file
@@ -154,7 +154,7 @@ function reveal(ids, interval, ids2) {
 	        return; 
 		}
 
-	}, 1);
+	}, interval);
 
 }
 
