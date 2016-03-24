@@ -88,7 +88,9 @@ $(document).ready(function () {
 		// Initalize and populate an extra array to keep track of unused pixels
 		//var N = count; 
 		//var ids2 = Array.apply(null, {length: N}).map(Number.call, Number);	
-		var ids2 = range(0, count);	
+		var ids2 = range(0, count-1);	
+console.log(count);
+console.log(ids2.length);		
 		ids2 = _.shuffle(ids2);
 		createPixels(count, function () {reveal(ids, interval.responseText, ids2)} );
 
