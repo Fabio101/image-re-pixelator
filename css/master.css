@@ -11,7 +11,7 @@ body {
 
 .pixel {
 	width:9px;
-        height:9px;
+    height:9px;
 	z-index: 1000;
 	display: inline;
 	float: left;
@@ -19,7 +19,7 @@ body {
 
 #main {
 	width:648px;
-        height:576px;
+    height:576px;
 	z-index: -999;
 	position: absolute;
 }

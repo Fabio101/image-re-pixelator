@@ -88,9 +88,7 @@ $(document).ready(function () {
 		// Initalize and populate an extra array to keep track of unused pixels
 		//var N = count; 
 		//var ids2 = Array.apply(null, {length: N}).map(Number.call, Number);	
-		var ids2 = range(0, count-1);	
-console.log(count);
-console.log(ids2.length);		
+		var ids2 = range(0, count);		
 		ids2 = _.shuffle(ids2);
 		createPixels(count, function () {reveal(ids, interval.responseText, ids2)} );
 
@@ -106,7 +104,7 @@ function reveal(ids, interval, ids2) {
 
 	var min = 0;
 	var numPixels = $('.pixel').length;
-console.log('Total Number of Pixels = '+numPixels);
+
 	//Main reveal loop
 	var pixelLoop = setInterval( function() {
 
@@ -128,18 +126,22 @@ console.log('Total Number of Pixels = '+numPixels);
 			data: {'pixels': ids, 'available_pixels': ids2},
 			async: true,
 			success: function(data, textStatus, jqXHR) {
-					//console.log("Wrote Pixel Progress to Server: " + textStatus);
+				//console.log("Wrote Pixel Progress to Server: " + textStatus);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
-					console.log("Something failed when writing Pixel Progress to Server: " + errorThrown);
+				console.log("Something failed when writing Pixel Progress to Server: " + errorThrown);
 			}
 		});
 
 		//If we have reached tthe total number of pixels we stop the loop
 		
-		if (ids.length > (numPixels)) {
-console.log('ids total length = '+ids.length);
-		    	clearInterval(pixelLoop);
+		if (ids.length > numPixels) {
+
+    		$('#main').attr('src', 'img/promo2.jpg');
+			// $('#main').css('zIndex', '9000');
+   //  		$('#main').css({ 'position': 'relative' });
+
+		    clearInterval(pixelLoop);
 			//We are done, remove the persisted data file
 			$.ajax({
 	            type: 'POST',
@@ -161,8 +163,8 @@ function createPixels(count, callback) {
 
 	for (i=0; i < count; i++) {
         	var div = $('<img id='+ i +' class="pixel "src="img/black.jpg">');
-                div.html();
-                div.appendTo(document.body);
+            div.html();
+            div.appendTo(document.body);
 
 		if (i == count-1) {
 			callback();
