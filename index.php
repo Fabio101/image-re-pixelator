@@ -5,9 +5,9 @@
   <meta charset=utf-8 />
   <meta name="viewport" content="width=device-width"/>
   <title>Pixels</title>
-  <link rel="stylesheet" type="text/css" href="css/master.css" />
-  <link rel="stylesheet" type="text/css" href="css/scroll_feed.css" />
   <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+  <link href="css/master.css?<?php echo time(); ?>" rel="stylesheet" type="text/css" /&glt;>
+  <link href="css/scroll_feed.css?<?php echo time(); ?>" rel="stylesheet" type="text/css" /&glt;>
 </head>
 
 <body>

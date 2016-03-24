@@ -135,7 +135,7 @@ function reveal(ids, interval, ids2) {
 
 		//If we have reached tthe total number of pixels we stop the loop
 		
-		if (ids.length > numPixels) {
+		if ((ids.length > numPixels) || (interval == '0')) {
 
     		$('#main').attr('src', 'img/promo2.jpg');
 			 $('#main').css('zIndex', '9000');
