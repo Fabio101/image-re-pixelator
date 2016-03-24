@@ -10,14 +10,14 @@
 $(document).ready(function () {
 
 	var interval = $.ajax({
-                type: "GET",
-                async: false,
-                url: "php/timeKeeper.php",
-                dataType: "text",
-                success : function(data) {
-                        return data;
-                        }
-        });
+        type: "GET",
+        async: false,
+        url: "php/timeKeeper.php",
+        dataType: "text",
+        success : function(data) {
+            return data;
+        }
+    });
 
 	console.log("Interval in milliseconds: " + interval.responseText);
 
@@ -37,28 +37,29 @@ $(document).ready(function () {
 
 	//We make an AJAX call to the server to get back a CSV file of pixelIDs.
 	var pixelIds = $.ajax({
-        	type: "GET",
-                async: false,
-                url: "php/retrieveProgress.php",
-                dataType: "text",
-                success : function(data) {
-                	return data;
-                }
+    	type: "GET",
+        async: false,
+        url: "php/retrieveProgress.php",
+        dataType: "text",
+        success : function(data) {
+        	return data;
+        }
 	});
 
 	var pixelAvailableIds = $.ajax({
-        	type: "GET",
-                async: false,
-                url: "php/retrieveProgress2.php",
-                dataType: "text",
-                success : function(data) {
-                	return data;
-                }
+    	type: "GET",
+        async: false,
+        url: "php/retrieveProgress2.php",
+        dataType: "text",
+        success : function(data) {
+        	return data;
+        }
 	});	
 
 	//Here we check if we have any data returned by our pervios AJAX call.
 	//We then either populate a new array with this data or start a fresh array.	
-	if (pixelIds.responseText != '') {		
+	if (pixelIds.responseText != '') {	
+
         var ids = pixelIds.responseText.split(',');
         var ids2 = pixelAvailableIds.responseText.split(',');
 
@@ -80,14 +81,17 @@ $(document).ready(function () {
                 callback1();
 			}
 		});
+
 	} else {
+
     	var ids = [];
 		// Initalize and populate an extra array to keep track of unused pixels
 		//var N = count; 
 		//var ids2 = Array.apply(null, {length: N}).map(Number.call, Number);	
-var ids2 = range(0, count);	
-ids2 = _.shuffle(ids2);
+		var ids2 = range(0, count);	
+		ids2 = _.shuffle(ids2);
 		createPixels(count, function () {reveal(ids, interval.responseText, ids2)} );
+
     }
 
 	//Now load the hidden image from GET parameter...
@@ -96,20 +100,11 @@ ids2 = _.shuffle(ids2);
 	});
 });
 
-function checkId(ids, pixelId) {
-	for(var x = 0; x < ids.length; x++) {
-		if(ids[x] === pixelId) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-}
-
 function reveal(ids, interval, ids2) {
+
 	var min = 0;
 	var numPixels = $('.pixel').length;
-
+console.log('Total Number of Pixels = '+numPixels);
 	//Main reveal loop
 	var pixelLoop = setInterval( function() {
 
@@ -121,43 +116,47 @@ function reveal(ids, interval, ids2) {
 
 		//if the pixel id does not exist in our id array, we enter it into the array and fade to zero opacity o nthat pixel div
 
-		    ids.push(pixelId);
-		    $('#' + pixelId).css('opacity', 0).fadeTo(100, 0);
+	    ids.push(pixelId);
+	    $('#' + pixelId).css('opacity', 0).fadeTo(100, 0);
 
-			//Lets save this data to the server...
-			$.ajax({
-				type: 'POST',
-				url: 'php/persistProgress.php',
-				data: {'pixels': ids, 'available_pixels': ids2},
-				async: true,
-				success: function(data, textStatus, jqXHR) {
-						//console.log("Wrote Pixel Progress to Server: " + textStatus);
-					 },
-				error: function(jqXHR, textStatus, errorThrown) {
-						console.log("Something failed when writing Pixel Progress to Server: " + errorThrown);
-					 }
-			});
-
-			//If we have reached tthe total number of pixels we stop the loop
-		
-		if (ids.length > numPixels) {
-		    	clearInterval(pixelLoop);
-		//We are done, remove the persisted data file
+		//Lets save this data to the server...
 		$.ajax({
-		                    type: 'POST',
-		                    url: 'php/persistProgress.php',
-		                    data: {'done': true}
-		            });
+			type: 'POST',
+			url: 'php/persistProgress.php',
+			data: {'pixels': ids, 'available_pixels': ids2},
+			async: true,
+			success: function(data, textStatus, jqXHR) {
+					//console.log("Wrote Pixel Progress to Server: " + textStatus);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+					console.log("Something failed when writing Pixel Progress to Server: " + errorThrown);
+			}
+		});
 
-		           	//Used for dev and testing the regression of ids. Not for production!
-		           	//checkDups();
-		            return; 
-		}	 
+		//If we have reached tthe total number of pixels we stop the loop
+		
+		if (ids.length > (numPixels)) {
+console.log('ids total length = '+ids.length);
+		    	clearInterval(pixelLoop);
+			//We are done, remove the persisted data file
+			$.ajax({
+	            type: 'POST',
+	            url: 'php/persistProgress.php',
+	            data: {'done': true}
+	        });
+
+	       	//Used for dev and testing the regression of ids. Not for production!
+	       	//checkDups();
+	        return; 
+		}
+
 	}, 1);
+
 }
 
 //The main functions which adds our pixels
 function createPixels(count, callback) {
+
 	for (i=0; i < count; i++) {
         	var div = $('<img id='+ i +' class="pixel "src="img/black.jpg">');
                 div.html();
@@ -169,6 +168,7 @@ function createPixels(count, callback) {
 			
 		}
     }
+
 }
 
 //NOT FOR PRODUCTION!
@@ -180,17 +180,20 @@ function checkDups() {
 	//Used this funciton during dev to verify that no duplicate pixels were duplicated in our reveal function.
         for (var i = 0; i < ids.length - 1; i++) {
         	if (sorted_ids[i + 1] == sorted_ids[i]) {
-                	results.push(sorted_ids[i]);
-                }
+                results.push(sorted_ids[i]);
+            }
         }
         alert(results);
+
 }
 
 function range(start, end) {
+
 console.log("range");	
     var foo = [];
     for (var i = start; i <= end; i++) {
         foo.push(i);
     }
     return foo;
+
 }
